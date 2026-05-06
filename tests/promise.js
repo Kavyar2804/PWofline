@@ -1,51 +1,37 @@
 //In this is scripts it will invoke resolve/pass or reject/fail based on their calling
 
 //1. Navigating to application
-let p1 =new Promise((pass,fail)=> {
+let p1 =new Promise((resolve,reject)=> {
     setTimeout(() => {
-            console.log("Launch the browser");
-            fail("Issue while launching browser");
-            pass("Browser launched");
+             console.log("Launch the browser");
+            reject("Issue while launching browser");
+            resolve("Browser launched");
     },2000);
-}).then((msg)=>{
-    console.log(msg);  
-})
-.catch((msg)=>{
-    console.log(msg);  
 })
 
 //2. Login to application
-let p2 = new Promise((pass,fail)=> {
+let p2 = new Promise((resolve,reject)=> {
     setTimeout(() => {
         console.log("User loged in");
-        fail("Invalid credentials");
-        pass("user has been logged in successfully");
+        reject("Invalid credentials");
+        resolve("user has been logged in successfully");
     }, 2000);
-}).then((msg)=>{
-console.log(msg);
-})
-.catch((msg)=>{
-    console.log(msg);
 })
 
-let p3= new Promise((pass,fail)=>{
+let p3= new Promise((resolve,reject)=>{
             setTimeout(() => {
                 console.log("Home page");
-                fail("Issue while login so user didn't navigated to home page");
-                pass("User successfully navigated to home page");
+                reject("Issue while login so user didn't navigated to home page");
+                resolve("User successfully navigated to home page");
             }, 2000);
-        }).then((msg)=>{
-            console.log(msg);
-        })
-        .catch((msg)=>{
-            console.log(msg);
         })
 
 //all method of Pomise will accept the array of promises and will return a single promise
 //here if all the 3 promises from the array are successfully executed then only then will be triggered or 
 //else it will trigger catch(if any one of the array promise is failed)
 //and the msg paramerter will have arry of all the then n catch passed msg for every promise in an array
-Promise.all([p1,p2,p3]).then((msg)=>{console.log(msg)})
+Promise.all([p1,p2,p3]).then((msg)=>{console.log(msg)}).catch((msg)=>{console.log(msg)});
+
 // .catch((msg)=>{console.log(msg)})
 
 //any method of Pomise will accept the array of promises and will return a single promise

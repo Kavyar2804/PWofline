@@ -1,10 +1,10 @@
-// import{test} from '@playwright/test'
+ import{test} from '@playwright/test'
 // import { log } from 'console';
 
 
 // test('gjkhgkghi', async({page, regstrpg}) => {
     
-//     await page.goto('https://www.amazon.in');
+   await page.goto('');
 
 // await page.locator('#twotabsearchtextbox').fill('laptop');
 // // 

@@ -1,6 +1,6 @@
 import{test} from '@playwright/test'
 import { Registerpage } from '../pageobjects/registerpage.js';
-// import tdata from '../testdata/registerdata.json'
+import tdata from '../testdata/registerdata.json'
 import excel from 'exceljs'
 import path, { join } from 'path';
  

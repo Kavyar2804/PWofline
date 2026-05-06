@@ -4,7 +4,9 @@
 import{test} from '@playwright/test'
 
 
-test.beforeAll('', () => {
+test.beforeAll('', async({browser}) => {
+
+    await browser.newContext()
 
     console.log('before all'); // data base connection
     

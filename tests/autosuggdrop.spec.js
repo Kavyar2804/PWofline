@@ -22,3 +22,4 @@ test('auto suggestion dynamic dd @smoke', async({page}) => {
 
     await page.pause()
 });
+
