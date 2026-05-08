@@ -21,6 +21,15 @@ pipeline {
         }
     }
 
+        stage('Trigger Another Job') {
+            steps {
+
+                build job: 'Playwright1234'
+
+            }
+        }
+    }
+
     post {
         always {
             echo 'Generating HTML reports...'

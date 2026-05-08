@@ -1,5 +1,9 @@
 import { test} from '@playwright/test'
 
+
+// test.use({storageState:'./auth.json'})
+
+
 test('frame', async({page}) => {
 
 await page.goto('https://demoapps.qspiders.com/ui/frames?sublist=0')
@@ -22,7 +26,7 @@ await page.pause()
 
     
 });
-test.skip('nested frame', async({page}) => {
+test('nested frame',{tag:['@smoke', '@tag']}, async({page}) => {
 
     await page.goto('https://demoapps.qspiders.com/ui/frames/nested?sublist=1')
     let parentframe= await page.frameLocator('[class="w-full h-96"]')
