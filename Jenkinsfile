@@ -10,19 +10,19 @@ pipeline {
             }
         }
 
-        stage('Run Tests') {
+          stage('Run Tests') {
             steps {
 
                 script {
 
-                    def status = bat(
-                        script: 'npx playwright test',
-                        returnStatus: true
-                    )
+                    catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
 
-                    if (status != 0) {
-                        echo "Tests failed, but continuing to generate reports..."
+                        bat 'npx playwright test'
+
                     }
+
+                    echo "Continuing pipeline even if tests fail..."
+
                 }
             }
         }
