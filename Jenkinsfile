@@ -2,6 +2,7 @@ pipeline {
     agent any
 
     stages {
+
         stage('Install Dependencies') {
             steps {
                 bat 'npm install'
@@ -11,15 +12,20 @@ pipeline {
 
         stage('Run Tests') {
             steps {
+
                 script {
-                    def status = bat(script: 'npx playwright test"', returnStatus: true)
+
+                    def status = bat(
+                        script: 'npx playwright test',
+                        returnStatus: true
+                    )
+
                     if (status != 0) {
                         echo "Tests failed, but continuing to generate reports..."
                     }
                 }
             }
         }
-    }
 
         stage('Trigger Another Job') {
             steps {
@@ -31,9 +37,10 @@ pipeline {
     }
 
     post {
-        always {
-            echo 'Generating HTML reports...'
 
+        always {
+
+            echo 'Generating HTML reports...'
 
             publishHTML(target: [
                 reportDir: 'playwright-report',
@@ -41,12 +48,9 @@ pipeline {
                 reportName: 'Playwright HTML Report',
                 alwaysLinkToLastBuild: true,
                 keepAll: true,
-                 alwaysLinkToLastBuild: true,
                 allowMissing: true,
                 linkRelative: false
             ])
-
-        
         }
     }
 }
