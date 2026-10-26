@@ -1,16 +1,10 @@
-import {test} from '../customfixture/login.js'
+import {test} from '../customfixture/login1.js'
 
 
+test('login action', async ({loginfixture1, page, }) => {
 
-test('login action', async ({loginfixture, search, regstrpg}) => {
+console.log('**********test');
 
-    await page.getByText('Without placeholder').click()
-
-    // await page.
-
-
-
-    
 });
 
 

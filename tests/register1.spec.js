@@ -1,15 +1,17 @@
-import{test} from '@playwright/test'
-import { Registerpage } from '../pageobjects/registerpage.js';
+// import{test} from '@playwright/test'
+// import { Registerpage } from '../pageobjects/registerpage.js';
+import { pomtest } from '../customfixture/pomfixture.js';
+
 import tdata from '../testdata/registerdata.json'
 import excel from 'exceljs'
 import path, { join } from 'path';
  
 
-test('register user', async({page}) => {
+pomtest('register user', async({regstrpg, page}) => {
 
-let rpage= new Registerpage(page)
- await rpage.navigate('https://demoapps.qspiders.com/ui?scenario=1')
-await rpage.nametf.waitFor()
+// let rpage= new Registerpage(page)
+ await regstrpg.navigate('https://demoapps.qspiders.com/ui?scenario=1')
+await regstrpg.nametf.waitFor()
 
 let book = new excel.Workbook()
 await book.xlsx.readFile('C:/Users/User/OneDrive/Desktop/PWofline/testdata/registerdata.xlsx')
@@ -36,26 +38,26 @@ await book.xlsx.readFile('C:/Users/User/OneDrive/Desktop/PWofline/testdata/regis
 
 
 
-await rpage.registeruser(username,email,pwd)
+await regstrpg.registeruser(username,email,pwd)
 
 // await rpage.registeruser(tdata.username,tdata.email, tdata.pwd)
 await page.pause()
     
 });
 
-test.skip('writedatatoexcel', async({page}) => {
+// test.skip('writedatatoexcel', async({page}) => {
 
-let book = new excel.Workbook()
-await book.xlsx.readFile(path.join(__dirname, '../testdata/registerdata.xlsx'))
-// let sheet = book.addWorksheet('newsheet1') //create new sheet in same excel file
-let sheet = book.getWorksheet('Sheet1') //write to same worksheet
-sheet.getRow(2).getCell(3).value='playwright'
-await book.xlsx.writeFile('C:/Users/User/OneDrive/Desktop/PWofline/testdata/registerdata.xlsx')
+// let book = new excel.Workbook()
+// await book.xlsx.readFile(path.join(__dirname, '../testdata/registerdata.xlsx'))
+// // let sheet = book.addWorksheet('newsheet1') //create new sheet in same excel file
+// let sheet = book.getWorksheet('Sheet1') //write to same worksheet
+// sheet.getRow(2).getCell(3).value='playwright'
+// await book.xlsx.writeFile('C:/Users/User/OneDrive/Desktop/PWofline/testdata/registerdata.xlsx')
 
 
 
     
-});
+// });
 
 
 

@@ -1,6 +1,6 @@
-import {test} from '../customfixture/login'
+import {test} from '../customfixture/login.js'
 
-test.beforeEach()
+// test.beforeEach()
 
 test('xxxxx', ({loginfixture, page}) => {
 

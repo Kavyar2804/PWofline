@@ -1,6 +1,6 @@
 import{test} from '@playwright/test'
 
-test('dialogs', async({loginfixture,page}) => {
+test('dialogs', async({page}) => {
 
     await page.goto('https://demoapps.qspiders.com/ui/alert?sublist=0')
   

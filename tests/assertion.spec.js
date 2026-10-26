@@ -1,53 +1,29 @@
-import {test, expect} from '@playwright/test'
+import {expect, test} from '../customfixture/login.js'
 
-test('assertion', async({page}) => {
+// import{ test, expect} from '@playwright/test'
 
-    // await page.goto('https://demoapps.qspiders.com/ui?scenario=1')
-    // // // await expect(page).toHaveTitle('DemoApps | Qspiders |',{timeout:6000})
-    // // // await expect(page).toHaveURL('https://demoapps.qspiders.com/ui?scenario=1')
-    // await expect(page.getByPlaceholder('Enter your name')).toBeEditable({timeout:2000,editable:false})
-    // //  await expect(page.getByPlaceholder('Enter your name')).toBeInViewport({ratio:0.5})
-    // //  await expect(page.getByRole('link', {name:'Text Field', exact:true})).toContainText('Field')
+test('performing assertions', async({loginfixture,page}) => {
 
-    // //  await page.goto('https://demoapps.qspiders.com/ui/table?scenario=1')
-    // //  await expect(page.locator('//tbody/tr/th')).toContainText(['HP Envy','APPLEIPhone', ])
-    // //  await expect(page.locator('//tbody/tr/th')).toHaveCount(4)
+// await page.goto('https://demoapps.qspiders.com/ui')
+// // await  expect(page).toHaveTitle('DemoApps | Qspiders | Text', {timeout:2000})
+// await expect(page.getByText('Without placeholder')).toContainText('placeholder')
+// await page.goto('https://demoapps.qspiders.com/ui/table?scenario=1')
+// await expect(page.locator('//tbody/tr/th')).toContainText(['HP Envy'])
+//  await expect(page.locator('//tbody/tr[1]/th')).toHaveAttribute('scope', 'row',{timeout:3000})
+ await expect(page.locator('//tbody/tr/th')).not.toHaveCount(4)
+  await page.goto('https://demoapps.qspiders.com/ui/button?sublist=0')
+await page.getByRole('button', {name: 'Yes'}).click()
+await expect.soft(page.getByRole('button', {name: 'Yes'}), 'it should have css property').toHaveCSS('background-color', 'rgb(134, 239, 172)')
 
-    //  await page.goto('https://demoapps.qspiders.com/ui/button?sublist=0')
-    //  await page.getByRole('button',{name: 'Yes'}).click()
-    //  await expect.soft(page.getByRole('button',{name: 'Yes'}), 'should match the value').toHaveCSS('background-color', 'rgb(134, 239, 17)')
+// await expect(page).tobe
 
-    //  await expect.soft(page, 'should match screenshot').toHaveScreenshot('home.png')
+// await expect.soft(page, 'to match exact to the screenshot').toHaveScreenshot()
 
-    //  let a = 'something'
+// let a = 'PLAYWRIGHT'
 
-    //  //negative
-    //  expect(a).not.toContain('thing')
+// expect(a, 'should match').toContain('PLAYWRIGHT')
 
-
-
-    //  await expect(page.getByText('Without placeholder')).toContainText('placeholder')
-
-    //  await expect(page.locator('//tbody/tr/th')).toContainText(['SAMSUNG Galaxy'])
- 
-    //   await expect(page.locator('//tbody/tr/th')).toHaveCount(4)
-    //  await expect(page.locator(('//tbody/tr/th')[1])).toHaveAttribute('scope', 'row')
-
-     await page.goto('https://demoapps.qspiders.com/ui/table?scenario=1')
-     await page.waitForTimeout(2000)
-     await expect(page.locator('//tbody/tr/th').nth(0)).toHaveCSS('color','rgb(17, 24, 3)')
-
-     await expect(page, 'screenshot should match').toHaveScreenshot('1stpage.png')
-
-
-     let a = 'string'
-
-
-     expect.soft(a, 'xxxxxxx').not.toContainEqual()
-
-
-
-
-
+await expect(page).toHaveScreenshot('homepage')
 
 });
+

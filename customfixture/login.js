@@ -3,6 +3,8 @@ import{test as basetest} from '@playwright/test'
 export const test = basetest.extend({
 
     loginfixture:async({page}, use)=>{
+
+       console.log('setup');
           
         await page.goto('https://demoapps.qspiders.com/ui?scenario=1')
         await page.getByPlaceholder('Enter your name').fill('abc123')
@@ -10,21 +12,39 @@ export const test = basetest.extend({
         await page.getByPlaceholder('Enter your password').fill('abc@123')
         await page.getByRole('button', {name:'Register'}).click()
         console.log('fixture');
-        
-
       await use()
+
+        console.log('teardown');
+          
+
 
       //logout
 
-    },
+    }})
 
-    search:async({page, use})=>{
-
-
-
-    }
+// basetest.extend({
 
 
+//   logoutfixture:async({page},use)=>{
+
+//     page.locator()
+
+//     //setup
+
+//    await use()
 
 
-})
+//teardown
+
+//   }
+
+
+
+// })
+
+
+
+
+
+
+export {expect} from '@playwright/test'
