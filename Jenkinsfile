@@ -1,6 +1,14 @@
 pipeline {
     agent any
 
+      parameters {
+    choice(name: 'ENV', choices: ['qa', 'stage', 'prod'], description: 'Target environment')
+  }
+
+  environment {
+    ENV = "${params.ENV}"        // available to Playwright as process.env.ENV
+  }
+
     stages {
 
         stage('Install Dependencies') {
