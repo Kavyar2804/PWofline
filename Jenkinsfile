@@ -1,6 +1,6 @@
 
 pipeline {
-    agent none
+    agent any
 
     options {
         timestamps()
@@ -10,7 +10,7 @@ pipeline {
         stage('Playwright Shards') {
             parallel {
                 stage('Shard 1') {
-                    agent { label 'windows' }
+                    agent any
 
                     steps {
                         catchError(
@@ -36,7 +36,7 @@ pipeline {
                 }
 
                 stage('Shard 2') {
-                    agent { label 'windows' }
+                    agent any
 
                     steps {
                         catchError(
@@ -62,7 +62,7 @@ pipeline {
                 }
 
                 stage('Shard 3') {
-                    agent { label 'windows' }
+                    agent any
 
                     steps {
                         catchError(
@@ -88,7 +88,7 @@ pipeline {
                 }
 
                 stage('Shard 4') {
-                    agent { label 'windows' }
+                    agent any
 
                     steps {
                         catchError(
@@ -116,7 +116,7 @@ pipeline {
         }
 
         stage('Merge Reports') {
-            agent { label 'windows' }
+            agent any
 
             steps {
                 checkout scm
