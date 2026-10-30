@@ -14,8 +14,8 @@ dotenv.config({
   //  path: path.resolve(__dirname, '.env')
   // path:`./environment/qa.env` //this is hardcoding which we should not do
   //setting default env
-  //  path:process.env.TEST_ENV ? `./environment/${process.env.TEST_ENV}.env` : `./environment/qa.env`
-   path:`./environment/${process.env.TEST_ENV}.env`
+   //path:process.env.TEST_ENV ? `./environment/${process.env.TEST_ENV}.env` : `./environment/qa.env`
+  //  path:`./environment/${process.env.TEST_ENV}.env`
 
  }); 
 

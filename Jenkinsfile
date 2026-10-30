@@ -1,160 +1,63 @@
+def envConfig = [
+    qa     : [url: 'https://www.saucedemo.com/', credId: 'QA-cred'],
+    uat    : [url: 'https://uat.example.com',    credId: 'UAT-cred'],
+    staging: [url: 'https://staging.example.com', credId: 'STAGING-cred']
+]
 
 pipeline {
     agent any
 
-    options {
-        timestamps()
+    parameters {
+        choice(
+            name: 'TARGET_ENV',
+            choices: ['qa', 'uat', 'staging'],
+            description: 'Select the environment to test'
+        )
+    }
+
+    environment {
+        BASE_URL = "${envConfig[params.TARGET_ENV].url}"
     }
 
     stages {
-        stage('Playwright Shards') {
-            parallel {
-                stage('Shard 1') {
-                    agent any
+        stage('Install Dependencies') {
+            steps {
+                bat 'npm install'
+                bat 'npx playwright install'
+            }
+        }
 
-                    steps {
-                        catchError(
-                            buildResult: 'FAILURE',
-                            stageResult: 'FAILURE'
-                        ) {
-                            checkout scm
-                            bat 'npm ci'
-                            bat 'npx playwright install chromium'
-                            bat 'npx playwright test --shard=1/4'
-                        }
-                    }
-
-                    post {
-                        always {
-                            stash(
-                                name: 'shard1-blob',
-                                includes: 'blob-report/**',
-                                allowEmpty: true
-                            )
-                        }
-                    }
-                }
-
-                stage('Shard 2') {
-                    agent any
-
-                    steps {
-                        catchError(
-                            buildResult: 'FAILURE',
-                            stageResult: 'FAILURE'
-                        ) {
-                            checkout scm
-                            bat 'npm ci'
-                            bat 'npx playwright install chromium'
-                            bat 'npx playwright test --shard=2/4'
-                        }
-                    }
-
-                    post {
-                        always {
-                            stash(
-                                name: 'shard2-blob',
-                                includes: 'blob-report/**',
-                                allowEmpty: true
-                            )
-                        }
-                    }
-                }
-
-                stage('Shard 3') {
-                    agent any
-
-                    steps {
-                        catchError(
-                            buildResult: 'FAILURE',
-                            stageResult: 'FAILURE'
-                        ) {
-                            checkout scm
-                            bat 'npm ci'
-                            bat 'npx playwright install chromium'
-                            bat 'npx playwright test --shard=3/4'
-                        }
-                    }
-
-                    post {
-                        always {
-                            stash(
-                                name: 'shard3-blob',
-                                includes: 'blob-report/**',
-                                allowEmpty: true
-                            )
-                        }
-                    }
-                }
-
-                stage('Shard 4') {
-                    agent any
-
-                    steps {
-                        catchError(
-                            buildResult: 'FAILURE',
-                            stageResult: 'FAILURE'
-                        ) {
-                            checkout scm
-                            bat 'npm ci'
-                            bat 'npx playwright install chromium'
-                            bat 'npx playwright test --shard=4/4'
-                        }
-                    }
-
-                    post {
-                        always {
-                            stash(
-                                name: 'shard4-blob',
-                                includes: 'blob-report/**',
-                                allowEmpty: true
-                            )
+        stage('Run Tests') {
+            steps {
+                withCredentials([usernamePassword(
+                    credentialsId: envConfig[params.TARGET_ENV].credId,
+                    usernameVariable: 'APP_USER',
+                    passwordVariable: 'APP_PASS'
+                )]) {
+                    script {
+                        def status = bat(script: 'npx playwright test handlemultiplenv', returnStatus: true)
+                        if (status != 0) {
+                            echo 'Tests failed, but continuing to generate reports...'
+                            currentBuild.result = 'UNSTABLE'
                         }
                     }
                 }
             }
         }
+    }
 
-        stage('Merge Reports') {
-            agent any
-
-            steps {
-                checkout scm
-                bat 'npm ci'
-
-                // Collect reports from all four shards.
-                unstash 'shard1-blob'
-                unstash 'shard2-blob'
-                unstash 'shard3-blob'
-                unstash 'shard4-blob'
-
-                // Merge available Blob reports into HTML.
-                bat '''
-                    if exist blob-report\\*.zip (
-                        npx playwright merge-reports --reporter html blob-report
-                    ) else (
-                        echo No Blob reports were generated.
-                    )
-                '''
-            }
-
-            post {
-                always {
-                    archiveArtifacts(
-                        artifacts: 'blob-report/**,playwright-report/**',
-                        allowEmptyArchive: true
-                    )
-
-                    publishHTML(target: [
-                        reportName: 'Playwright Combined Report',
-                        reportDir: 'playwright-report',
-                        reportFiles: 'index.html',
-                        keepAll: true,
-                        alwaysLinkToLastBuild: true,
-                        allowMissing: true
-                    ])
-                }
-            }
+    post {
+        always {
+            echo 'Generating HTML reports...'
+            publishHTML(target: [
+                reportDir: 'playwright-report',
+                reportFiles: 'index.html',
+                reportName: 'Playwright HTML Report',
+                alwaysLinkToLastBuild: true,
+                keepAll: true,
+                allowMissing: true,
+                linkRelative: false
+            ])
         }
     }
 }
